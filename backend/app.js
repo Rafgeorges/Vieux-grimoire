@@ -1,24 +1,22 @@
 const express = require('express');
-
+const router = express.Router();
+const mongoose = require('mongoose');
 const app = express();
+//On importe les routes
+const stuffRoutes = require('./routes/stuff');
 
-app.use((req, res, next) => {
-  console.log('Requête reçue !');
-  next();
-});
 
-app.use((req, res, next) => {
-  res.status(201);
-  next();
-});
 
-app.use((req, res, next) => {
-  res.json({ message: 'Votre requête a bien été reçue !' });
-  next();
-});
+// On exporte les requêtes vers le dossier routes
+app.use('/api/stuff', stuffRoutes);
 
-app.use((req, res, next) => {
-  console.log('Réponse envoyée avec succès !');
-});
+mongoose.connect('mongodb+srv://user1:user1password@cluster0.vrm0md5.mongodb.net/?retryWrites=true&w=majority',
+  { useNewUrlParser: true,
+    useUnifiedTopology: true })
+  .then(() => console.log('Connexion à MongoDB réussie !'))
+  .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-module.exports = app;
+
+
+
+module.exports = router;
