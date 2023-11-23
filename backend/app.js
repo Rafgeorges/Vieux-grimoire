@@ -3,6 +3,8 @@ const mongoose = require('mongoose')
 
 const Model_Thing = require('./models/Model_Thing')
 
+const userRoutes = require('./routes/route_user')
+
 
 //Lien avec MongoDB
 mongoose.connect('mongodb+srv://user1:user1password@cluster0.vrm0md5.mongodb.net/?retryWrites=true&w=majority',
@@ -48,5 +50,10 @@ app.use((req, res, next) => {
       .then(thing => res.status(200).json(thing))
       .catch(error => res.status(404).json({ error }));
   });
+
+
+
+
+app.use('/api/auth', userRoutes);
 
 module.exports = app;
