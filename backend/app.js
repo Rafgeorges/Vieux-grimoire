@@ -1,20 +1,24 @@
 const express = require('express');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const Model_Thing = require('./models/Model_Thing');
+const userRoutes = require('./routes/route_user');
 
-const Model_Thing = require('./models/Model_Thing')
+const app = express();
 
-const userRoutes = require('./routes/route_user')
+// Middleware pour parser le corps des requêtes JSON
+app.use(express.json());
 
-
+// Middleware pour parser le corps des requêtes de formulaire
+app.use(express.urlencoded({ extended: true }));
+  
 //Lien avec MongoDB
 mongoose.connect('mongodb+srv://user1:user1password@cluster0.vrm0md5.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
+  
 
-  //App express
-const app = express();
 
 //CORS
 app.use((req, res, next) => {
@@ -23,21 +27,25 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
   });
-
-
+  
   //REQUETES
-
+  
+  
+  app.post('/api/test', (req, res) => {
+    console.log(req.body);
+    res.send('Test réussi !');
+  });
+  
   // POST
   app.post('/api/books', (req, res, next) => {
-    const thing = new Model_Thing({
-          title: req.body.title,
-          description: req.body.description        
+    const newThing = new Model_Thing({
+      ...req.body,
     });
-    thing.save()
-      .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
-      .catch(error => res.status(400).json({ error }));
+    newThing.save()
+    .then(() => res.status(201).json({message : 'success' , data : newThing}))
+    .catch(error => res.status(400).json({ error }));
   });
-
+  
   // FIND
   app.use('/api/books', (req, res, next) => {
     Model_Thing.find()
