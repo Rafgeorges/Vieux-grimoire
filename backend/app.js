@@ -13,6 +13,7 @@ mongoose.connect('mongodb+srv://user1:user1password@cluster0.vrm0md5.mongodb.net
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
+  //App express
 const app = express();
 
 //CORS
@@ -29,7 +30,8 @@ app.use((req, res, next) => {
   // POST
   app.post('/api/books', (req, res, next) => {
     const thing = new Model_Thing({
-      ...req.body
+          title: req.body.title,
+          description: req.body.description        
     });
     thing.save()
       .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
