@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const Model_Thing = require('./models/Model_Thing');
 const userRoutes = require('./routes/route_user');
+const booksRoutes = require('./routes/route_books')
 
 const app = express();
 
@@ -27,43 +27,15 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
   });
+ 
   
-  //REQUETES
-  
-  
-  app.post('/api/test', (req, res) => {
-    console.log(req.body);
-    res.send('Test réussi !');
-  });
-  
-  // POST
-  app.post('/api/books', (req, res, next) => {
-    const newThing = new Model_Thing({
-      ...req.body,
-    });
-    newThing.save()
-    .then(() => res.status(201).json({message : 'success' , data : newThing}))
-    .catch(error => res.status(400).json({ error }));
-  });
-  
-  // FIND
-  app.use('/api/books', (req, res, next) => {
-    Model_Thing.find()
-      .then(things => res.status(200).json(things))
-      .catch(error => res.status(400).json({ error }));
-  });
+
+// // Gestion de la ressource images de manière statique
+// app.use('/images', express.static(path.join(__dirname, 'images')));
 
 
-//  GET 
-  app.get('/api/books/:id', (req, res, next) => {
-    Thing.findOne({ _id: req.params.id })
-      .then(thing => res.status(200).json(thing))
-      .catch(error => res.status(404).json({ error }));
-  });
-
-
-
-
+// Utilisation des routes
 app.use('/api/auth', userRoutes);
+app.use('/api/books', booksRoutes)
 
 module.exports = app;
