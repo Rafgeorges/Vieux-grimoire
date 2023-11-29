@@ -5,6 +5,8 @@ const booksRoutes = require('./routes/route_books')
 
 const app = express();
 
+const path = require('path');
+
 // Middleware pour parser le corps des requêtes JSON
 app.use(express.json());
 
@@ -30,12 +32,13 @@ app.use((req, res, next) => {
  
   
 
-// // Gestion de la ressource images de manière statique
-// app.use('/images', express.static(path.join(__dirname, 'images')));
 
 
 // Utilisation des routes
 app.use('/api/auth', userRoutes);
 app.use('/api/books', booksRoutes)
+
+// Gestion de la ressource statique image
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 module.exports = app;
