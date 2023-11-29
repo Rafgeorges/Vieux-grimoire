@@ -149,5 +149,7 @@ exports.getBestRating = (req, res, next) => {
     // Puis tri par rapport aux moyennes dans l'ordre décroissant, limitation du tableau aux 3 premiers éléments
     ModelBook.find().sort({averageRating: -1}).limit(3)
         .then((books)=>res.status(200).json(books))
-        .catch((error)=>res.status(404).json({ error }));
+        // .catch((error)=>res.status(404).json({ error }));
+        .catch(()=>res.status(404).json({ message: 'La note doit être comprise entre 1 et 5' }));
+
 };
